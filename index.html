@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Adding bootstratp 3.3.7 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <title>Psychic Game</title>
+</head>
+
+<body>
+    <header>
+        <h1>Psychic Game</h1>
+    </header>
+    <div class="panel panel-default" id="attempt-parent">
+        <!-- Default panel contents -->
+        <div class="panel-heading" id="attempt-panel">
+            <!-- Text: guess what letter I am thinking of? -->
+            <h4>Can you guess what letter the computer has chosen at random?</h4>
+        </div>
+        <div class="panel-body">
+            <p>
+                Using the keyboard, type a letter to guess the letter the computer has chosen. You will have a total of
+                <span class="badge" id="total-attempts">&#x221e</span>
+                guesses available. If you guess the letter within the maximum allowed attempts, you win!
+            </p>
+            <table class="table">
+                <tr>
+                    <th>Player Current Letter</th>
+                    <th>Computer Current Letter</th>
+                    <th>Player guesses so far</th>
+                    <th>Guesses remaining</th>
+                </tr>
+                <tr>
+                    <td>
+                        <!-- When the player wins, the number of wins updates automatically and a new game begins (without refreshing the browser) -->
+                        <span id="player-current-letter"><em>not yet defined</em></span>
+                    </td>
+                    <td>
+                        <span id="computer-current-letter"><em>not yet defined</em></span>
+                    </td>
+                    <td>
+                        <!-- Your guesses so far: the specific letters that the user has typed. Display until the user wins or loses. -->
+                        <span id="player-guesses"><em>not yet defined</em></span>
+                    </td>
+                    <td>
+                        <!-- Guesses left: the number guesses the user has available to them (This should automatically update) -->
+                        <span id="remaining-guesses"><em>not yet defined</em></span>
+                    </td>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default" id="score-parent">
+        <!-- Default panel contents -->
+        <div class="panel-heading" id="score-panel">
+            <h4>Score</h4>
+        </div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <!-- Wins: number of times the user has guesses the letter correctly. -->
+
+                <li class="list-group-item">
+                    <!-- When the player wins, the number of wins updates automatically and a new game begins (without refreshing the browser) -->
+                    <span class="badge" id="total-wins">0</span>
+                    <h3>Wins</h3>
+                </li>
+                <!-- Losses: number of times the user was unable to guess the letter corectly after exhausing all guesses -->
+                <li class="list-group-item">
+                    <!-- when the player loses, increase the losses counter and restart the game without a page refresh. -->
+                    <span class="badge" id="total-losses">0</span>
+                    <h3>Losses</h3>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Table -->
+
+    </div>
+    <div class="score">
+
+    </div>
+
+    <script src="assets/javascript/game.js">
+
+        // logToCon("test message");
+        
+    </script>
+
+
+</body>
+
+</html>

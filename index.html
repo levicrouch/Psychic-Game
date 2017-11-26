@@ -29,18 +29,23 @@
             </p>
             <table class="table">
                 <tr>
-                    <th>Player Current Letter</th>
                     <th>Computer Current Letter</th>
-                    <th>Player guesses so far</th>
+                    <th>Player Current Letter</th>
+                    <th>Match?</th>
+                    <th>Letters guessed so far</th>
                     <th>Guesses remaining</th>
                 </tr>
                 <tr>
+                    <td>
+                        <span id="computer-current-letter"><em>not yet defined</em></span>
+                    </td>
                     <td>
                         <!-- When the player wins, the number of wins updates automatically and a new game begins (without refreshing the browser) -->
                         <span id="player-current-letter"><em>not yet defined</em></span>
                     </td>
                     <td>
-                        <span id="computer-current-letter"><em>not yet defined</em></span>
+                        <!-- Displays the result of whether or not the player guess matches the computer guess -->
+                        <span id="match-status"><em>not yet defined</em></span>
                     </td>
                     <td>
                         <!-- Your guesses so far: the specific letters that the user has typed. Display until the user wins or loses. -->

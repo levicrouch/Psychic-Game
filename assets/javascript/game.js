@@ -1,10 +1,12 @@
 // External js file for pyschic game
 //Turn on debugging
-var debug = true;
+debug = true;
 
-//Set the condition to play game
-var playGame = true;
-
+//Create blank variable for isWinner
+//Will be set to true when the player wins
+//Will be set to false when the player loses
+//controls the do-while loop game plays until isWinner is set to either true or false.
+isWinner = false;
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
@@ -13,96 +15,11 @@ var playGame = true;
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// Log message to console
-function logToCon(message) {
-    console.log(message);
-}
-
 // Update html document
 function writeHTML(id, value) {
     document.querySelector("#" + id).innerHTML = value;
-    logToCon("writeHTML: ID: " + id + " value: " + value)
+    // console.log("writeHTML: ID: " + id + " value: " + value);
 }
-
-//Reset document keeping the wins and losses count
-function resetPicks() {
-    //regenerate random letter
-    //var randomLetter = generateRandomLetter()
-    //reset userGuess
-    var userGuess = "";
-    //reset tempNumberOfAttempts
-    var tempNumberOfAttempts = 0;
-    //reset arrHistoricGuesses
-    var arrHistoricGuesses = [];
-    //reset isWinner back to false
-    if (isWinner) {
-        var isWinner = false
-
-    }
-}
-
-function determineMatch(playerPick, computerPick) {
-    //Determine if letter matches computer
-    if (playerPick === computerPick) {
-        var isWinner = true;
-        updateWinCounter();
-        alert("You Win!")
-        return isWinner;
-    }
-}
-function logGuess(userGuess, arrHistoricGuesses) {
-    //Update list of previous user guesses with the letter selected
-    arrHistoricGuesses.push(userGuess);
-    //Set the user guess value
-    writeHTML("player-current-letter", userGuess);
-    if (debug) {
-        //Debug message
-        logToCon("arrHistoricGuesses: " + arrHistoricGuesses);
-    }
-    writeHTML("player-guesses", arrHistoricGuesses);
-    return arrHistoricGuesses;
-}
-
-function updateWinCounter() {
-    //increment Win number
-    winCounter++
-    if (debug) {
-        //Debug message
-        logToCon("winCounter (after incrementing): " + winCounter);
-    }
-    //Write updated wins counter on page
-    writeHTML("total-wins", winCounter);    
-}
-
-function updateLossCounter() {
-    //increment loss number
-    lossCounter++
-    if (debug) {
-        //Debug message
-        logToCon("lossCounter (after incrementing): " + lossCounter);
-    }
-    //Write updated wins counter on page
-    writeHTML("total-losses", lossCounter);
-}
-
-function generateRandomLetter() {
-    //Generate the computer guess
-    //Create pool of letters for computer to draw from
-    var randomLetterPool = "abcdefghijklmnopqrstuvwxyz";
-    var randomLetter = "";
-    //Randomly generate a letter for the computer pick
-    for (var i = 0; i < 1; i++) {
-        //Generates a random letter from the randomLetterPool
-        randomLetter += randomLetterPool.charAt(Math.floor(Math.random() * randomLetterPool.length));
-    }
-    if (debug) {
-        logToCon("randomLetter generated as: " + randomLetter);
-    }
-    // Select the span with the id of "computer-current-letter" and insert the following HTML into it.
-    writeHTML("computer-current-letter", randomLetter);
-    return randomLetter
-}
-
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -114,73 +31,138 @@ function generateRandomLetter() {
 
 //Set variables to their default state on page reload
 //Set the number of attempts
-var numberOfAttempts = 3;
+maxNumberOfAttempts = 4;
 
 //Set a temporary variable to decrement as the game is played
-var tempNumberOfAttempts = numberOfAttempts
+remainingAttempts = maxNumberOfAttempts;
 
 //Empty array for storing historical user guesses
-var arrHistoricGuesses = [];
+arrHistoricGuesses = [];
 
 //Empty array for storing wins and losses
-var winCounter = 0;
-var lossCounter = 0;
+winCounter = 0;
+lossCounter = 0;
 
-//Create blank variable for isWinner
-var isWinner = false;
+//Create blank variable for isMatch
+isMatch = false;
 
-//Set the userGuess to blank
-var userGuess = "";
 
+// Standardized text of "not yet defined"
+notYetDef = "<em>not yet defined</em>";
+
+// Standardized text of "No match"
+noMatch = "<strong>No Match</strong>";
+match = "<strong>Match</strong>";
+
+//Create pool of letters for computer to draw from
+computerChoices = "abcdefghijklmnopqrstuvwxyz";
+
+generateComputerGuess = true;
 //Select the span with the id of "total-attempts" and, and insert the total number of attempts available.
-writeHTML("total-attempts", numberOfAttempts);
-// Set the remaining-guesses span with the total available guesses
-writeHTML("remaining-guesses", numberOfAttempts);
+writeHTML("total-attempts", maxNumberOfAttempts);
 
-//Generate the computer pick
-var randomletter = generateRandomLetter();
 
-//Player picks a letter
 document.onkeyup = function (event) {
-
+    //Generate the computer guess
+    //Randomly generate a letter for the computer pick
+    if (generateComputerGuess) {
+        var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
+        if (debug) {
+            console.log("computerGuess generated as: " + computerGuess);
+        }
+    }
+    // Select the span with the id of "computer-current-letter" and insert the following HTML into it.
+    writeHTML("computer-current-letter", computerGuess);
+    //Player picks a letter
+    //If the player pick does not match the computer but there are still greater than 0 attempts available
+    // for (i = 0; i < remainingAttempts; i++){
+    // Need to add a for loop here (?) that allows us to loop through a maximum number of times as set by remainingAttempts
+    // for (i = 0; i < remainingAttempts || isWinner; i++) {
+    // if (!isMatch || remainingAttempts > 0) {
     // Determines which key was pressed.
     var userGuess = event.key;
-    logToCon("userGuess: " + userGuess);
-
+    // console.log("userGuess: " + userGuess);
+    console.log("userGuess: " + userGuess);
     //Write userGuess to document
-    writeHTML("player-current-letter", userGuess)
+    writeHTML("player-current-letter", userGuess);
+    //Update list of previous user guesses with the letter selected
+    arrHistoricGuesses.push(userGuess);
+    writeHTML("player-guesses", arrHistoricGuesses);
 
+    // Message to user that the computer is checking status
+    writeHTML("match-status", "Checking...");
     //Decrement the attempt counter
     if (debug) {
         //Debug message
-        logToCon("tempNumberOfAttempts (before decrementing): " + tempNumberOfAttempts);
+        console.log("remainingAttempts (before decrementing): " + remainingAttempts);
     }
-    //decrement the picks remaining (numberOfAttempts) by one every time the player chooses a letter 
-    tempNumberOfAttempts--
+    //decrement the picks remaining (remainingAttempts) by one every time the player chooses a letter 
+    remainingAttempts--;
+    writeHTML("remaining-guesses", remainingAttempts);
     if (debug) {
         //Debug message
-        logToCon("tempNumberOfAttempts (after decrementing): " + tempNumberOfAttempts);
+        console.log("remainingAttempts (after decrementing): " + remainingAttempts);
     }
+
     //Determine is the player guess matches the computer pick
-    var isWinner = determineMatch(userGuess, randomletter);
-    if (!isWinner) {
-        if (tempNumberOfAttempts === 0 || tempNumberOfAttempts > numberOfAttempts) {
-            var isWinner = false;
-            alert("You lose!");
-            logToCon("Exceeded the number of maximum number of attempts of: " + numberOfAttempts);
-            updateLossCounter();
-        } else {
-            //Log number of attempts left
-            logToCon("Keep going, you still have: " + tempNumberOfAttempts + " left");
-            writeHTML("remaining-guesses", tempNumberOfAttempts);
-            //Log player's guess to page
-            logGuess(userGuess, arrHistoricGuesses);
+    //Determine if letter matches computer
+    if (userGuess === computerGuess) {
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////                 Win scenario                         //////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        isMatch = true;
+        console.log("Your pick of: *" + userGuess + "* matched the computer's guess of: *" + computerGuess + "*");
+        writeHTML("match-status", match);
+        // var arrHistoricGuesses = logGuess(userGuess, arrHistoricGuesses);
+        isWinner = true;
+        //Increment the wins counter
+        winCounter++;
+        if (debug) {
+            //Debug message
+            console.log("winCounter (after incrementing): " + winCounter);
         }
+        //Alert that the user has won
+        alert("You Win!");
+        writeHTML("total-wins", winCounter);
+        // trigger a regeneration of the computer guess
+        generateComputerGuess = true;
     }
+    if (!isMatch && remainingAttempts > 0) {
+        isMatch = false;
+
+        console.log("Sorry, the letter you chose: *" + userGuess + "* does not match the computer pick");
+        writeHTML("match-status", noMatch);
+        //Log number of attempts left
+        console.log("Keep going, you still have: " + remainingAttempts + " left");
+        generateComputerGuess = false;
+    }
+    if (!isMatch && remainingAttempts <= 0) {
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////                 Lose scenario                        //////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        isWinner = false;
+        console.log("Exceeded the number of maximum number of attempts of: " + maxNumberOfAttempts);
+        lossCounter++;
+        if (debug) {
+            //Debug message
+            console.log("lossCounter (after incrementing): " + lossCounter);
+        }
+        alert("You lose!");
+        writeHTML("total-losses", lossCounter);
+        generateComputerGuess = true;
+    }
+
+
+
 }
-
-
-
 
 
 

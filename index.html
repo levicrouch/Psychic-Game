@@ -95,6 +95,42 @@
             </div>
         </div>
     </div>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-heading" id="solution">
+                        <h1>Solution</h1>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <!-- Wins: number of times the user has guesses the letter correctly. -->
+
+                            <li class="list-group-item">
+                                <!-- Display the last computer guess -->
+                                <span class="badge" id="solution-computer-guess"><!-- set by game.js --></span>
+                                <h3>Computer Guess</h3>
+                                <p><em>Last letter chosen by computer</p></em>
+                            </li>
+                            <!-- Losses: number of times the user was unable to guess the letter corectly after exhausing all guesses -->
+                            <li class="list-group-item">
+                                <!-- display the last winning guess -->
+                                <span class="badge" id="solution-player-guess"><!-- set by game.js --></span>
+                                <h3>Player Guess</h3>
+                                <p><em>Last winning letter chosen by player</p></em>
+                            </li>
+                            <li class="list-group-item">
+                                <!-- Display the last letters chosen -->
+                                <span class="badge" id="solution-player-array"><!-- set by game.js --></span>
+                                <h3>Player Guesses</h3>
+                                <p><em>Previously chosen letters</p></em>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="assets/javascript/game.js">
 
     </script>

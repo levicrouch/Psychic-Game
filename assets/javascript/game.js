@@ -69,7 +69,7 @@ function determineMatch(playerPick, computerPick) {
     }
 }
 // Function to reset the game variables back to their defaults for the next game
-function resetGame() {
+function resetGame(userPick,computerPick,winner,array) {
     // If isWinner is not null (meaning either a win or loss *has* been determined), reset variables and generate new guesses
     // reset remainingAttempts to default
     remainingAttempts = maxNumberOfAttempts;
@@ -91,6 +91,19 @@ function resetGame() {
     computerGuess = "";
     writeHTML("computer-current-letter", notDisplayed);
 
+    // reset the solution
+    if (winner){
+        // if the player won, display the winning picks
+        writeHTML("solution-computer-guess", computerPick);
+        writeHTML("solution-player-guess", userPick);
+        writeHTML("solution-player-array", array);
+    }else {
+        // if player lost show the computer pick
+        writeHTML("solution-computer-guess", computerPick);
+        writeHTML("solution-player-array", array);
+    }
+    
+    
     // Regenerate a new computer guess and play again
     computerGuess = generateComputerGuess();
 }
@@ -169,6 +182,10 @@ writeHTML("computer-current-letter", notDisplayed);
 writeHTML("player-current-letter", notYetDef);
 writeHTML("player-guesses", notYetDef);
 writeHTML("remaining-guesses", notYetDef);
+writeHTML("solution-computer-guess", notYetDef);
+writeHTML("solution-player-guess", notYetDef);
+writeHTML("solution-player-array", notYetDef);
+
 //Select the span with the id of "total-attempts" and, and insert the total number of attempts available.
 writeHTML("total-attempts", maxNumberOfAttempts);
 
@@ -258,7 +275,7 @@ document.onkeyup = function (event) {
 
         // call the resetGame function to reset key variables 
         // to allow another game without resetting the win or loss counter
-        resetGame();
+        resetGame(userGuess,computerGuess,isWinner,arrHistoricGuesses);
     } else {
         // This else statement handles the situation where we did not match 
         // the computer's letter but still have attempts remaining
@@ -304,7 +321,7 @@ document.onkeyup = function (event) {
 
         //  call the resetGame function to reset key variables 
         // to allow another game without resetting the win or loss counter
-        resetGame();
+        resetGame(userGuess,computerGuess,isWinner,arrHistoricGuesses);
     }
 
 }

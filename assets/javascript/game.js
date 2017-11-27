@@ -17,11 +17,11 @@
 // Feel free to tweak these values as desired
 
 // Set the number of attempts
-maxNumberOfAttempts = 4;
+maxNumberOfAttempts = 10;
 
 // Turn on debugging
 // Note for person grading: set to true to see the computer's guess in real time.
-debug = true;
+debug = false;
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,11 @@ function generateComputerGuess() {
         console.log("computerGuess generated as: " + randomLetter);
     }
     // Select the span with the id of "computer-current-letter" and insert the following HTML into it.
-    writeHTML("computer-current-letter", randomLetter);
+    if (debug){
+        writeHTML("computer-current-letter", randomLetter);
+    }else {
+        writeHTML("computer-current-letter", notDisplayed);
+    }
     return randomLetter
 }
 
@@ -77,7 +81,7 @@ function resetGame() {
 
     // reset isMatch variable
     isMatch = null;
-    writeHTML("match-status", notYetDef);
+    writeHTML("status-text", pressLetter);
 
     // reset historical guesses array
     arrHistoricGuesses = [];
@@ -85,7 +89,7 @@ function resetGame() {
 
     // reset computer guesses
     computerGuess = "";
-    writeHTML("computer-current-letter", notYetDef);
+    writeHTML("computer-current-letter", notDisplayed);
 
     // Regenerate a new computer guess and play again
     computerGuess = generateComputerGuess();
@@ -99,12 +103,31 @@ function resetGame() {
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////                     Status text                      //////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
 // Standardized text of "not yet defined"
-notYetDef = "<em>not yet defined</em>";
+notYetDef = "Not yet defined";
+
+// Standardized text of "Press any letter to play..."
+pressLetter = "<span class=\"label label-primary\">Press any letter to play...</span>";
+
+// Standardized text of checking for a match...
+checkForMatch = "<span class=\"label label-info\">Checking for a match...</span>";
 
 // Standardized text of "No match"
-noMatch = "<strong>No Match</strong>";
-match = "<strong>Match</strong>";
+// noMatch = "<strong>No Match</strong>";
+// match = "<strong>Match</strong>";
+noMatch = "<span class=\"label label-danger\">That letter did not Match!</span>";
+match = "<span class=\"label label-success\">Match!!!</span>";
+notDisplayed = "Not Displayed";
 
 // Create null variable for isWinner
 // Will be set to a boolean whether or not the ultimate result of the players guesses results in a win or not
@@ -141,9 +164,9 @@ remainingAttempts = maxNumberOfAttempts;
 // Could have set the default values in HTML (lines 40, 44, 48, 52, and 56 in index.html),
 // but it seemed to make more sense to set the values here
 // so they could be consistent as the status' change during the game.
-writeHTML("computer-current-letter", notYetDef);
+writeHTML("status-text",pressLetter);
+writeHTML("computer-current-letter", notDisplayed);
 writeHTML("player-current-letter", notYetDef);
-writeHTML("match-status", notYetDef);
 writeHTML("player-guesses", notYetDef);
 writeHTML("remaining-guesses", notYetDef);
 //Select the span with the id of "total-attempts" and, and insert the total number of attempts available.
@@ -179,7 +202,7 @@ document.onkeyup = function (event) {
     writeHTML("player-guesses", arrHistoricGuesses);
 
     // Message to user that the computer is checking status
-    writeHTML("match-status", "Checking...");
+    writeHTML("status-text",checkForMatch);
 
     // Decrement the attempt counter
     if (debug) {
@@ -214,8 +237,8 @@ document.onkeyup = function (event) {
         // Log a message to the console
         console.log("Your pick of: *" + userGuess + "* matched the computer's guess of: *" + computerGuess + "*");
 
-        // Update the HTML document's match-status id to indicate a match
-        writeHTML("match-status", match);
+        // Update the HTML document's status-text id to indicate a match
+        writeHTML("status-text", match);
 
         // As we have a match we also want to set the "isWinner" global variable to true
         isWinner = true;
@@ -241,7 +264,7 @@ document.onkeyup = function (event) {
         // the computer's letter but still have attempts remaining
 
         // Update HTML to show that the letter guessed does not match
-        writeHTML("match-status", noMatch);
+        writeHTML("status-text", noMatch);
     }
 
     // If we do not match the computer letter, and have exhausted all our available attempts
@@ -260,7 +283,7 @@ document.onkeyup = function (event) {
         isWinner = false;
 
         // Update HTML document to indicate that there was not a successful match
-        writeHTML("match-status", noMatch);
+        writeHTML("status-text", noMatch);
 
         // Log message to the console
         console.log("Exceeded the number of maximum number of attempts of: " + maxNumberOfAttempts);

@@ -19,6 +19,7 @@
 // Set the number of attempts
 maxNumberOfAttempts = 10;
 
+
 // Turn on debugging
 // Note for person grading: set to true to see the computer's guess in real time.
 debug = false;
@@ -45,9 +46,9 @@ function generateComputerGuess() {
         console.log("computerGuess generated as: " + randomLetter);
     }
     // Select the span with the id of "computer-current-letter" and insert the following HTML into it.
-    if (debug){
+    if (debug) {
         writeHTML("computer-current-letter", randomLetter);
-    }else {
+    } else {
         writeHTML("computer-current-letter", notDisplayed);
     }
     return randomLetter
@@ -69,7 +70,7 @@ function determineMatch(playerPick, computerPick) {
     }
 }
 // Function to reset the game variables back to their defaults for the next game
-function resetGame(userPick,computerPick,winner,array) {
+function resetGame(userPick, computerPick, winner, array) {
     // If isWinner is not null (meaning either a win or loss *has* been determined), reset variables and generate new guesses
     // reset remainingAttempts to default
     remainingAttempts = maxNumberOfAttempts;
@@ -92,21 +93,22 @@ function resetGame(userPick,computerPick,winner,array) {
     writeHTML("computer-current-letter", notDisplayed);
 
     // reset the solution
-    if (winner){
+    if (winner) {
         // if the player won, display the winning picks
         writeHTML("solution-computer-guess", computerPick);
         writeHTML("solution-player-guess", userPick);
         writeHTML("solution-player-array", array);
-    }else {
+    } else {
         // if player lost show the computer pick
         writeHTML("solution-computer-guess", computerPick);
         writeHTML("solution-player-array", array);
     }
-    
-    
+
+
     // Regenerate a new computer guess and play again
     computerGuess = generateComputerGuess();
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -132,6 +134,9 @@ notYetDef = "Not yet defined";
 // Standardized text of "Press any letter to play..."
 pressLetter = "<span class=\"label label-primary\">Press any letter to play...</span>";
 
+// Set the playerGuess to blank
+// playerGuess = "";
+
 // Standardized text of checking for a match...
 checkForMatch = "<span class=\"label label-info\">Checking for a match...</span>";
 
@@ -150,6 +155,9 @@ isWinner = null;
 // Will be set to a boolean whether or not the player and computer guesses match
 isMatch = null;
 
+// Create null variable for isLetter
+// Will be set to a boolean whether or not the player presses a letter
+isLetter = null;
 
 // Empty array for storing historical user guesses
 arrHistoricGuesses = [];
@@ -177,7 +185,7 @@ remainingAttempts = maxNumberOfAttempts;
 // Could have set the default values in HTML (lines 40, 44, 48, 52, and 56 in index.html),
 // but it seemed to make more sense to set the values here
 // so they could be consistent as the status' change during the game.
-writeHTML("status-text",pressLetter);
+writeHTML("status-text", pressLetter);
 writeHTML("computer-current-letter", notDisplayed);
 writeHTML("player-current-letter", notYetDef);
 writeHTML("player-guesses", notYetDef);
@@ -206,126 +214,135 @@ document.onkeyup = function (event) {
     //Player picks a letter
     // Determines which key was pressed.
     var userGuess = event.key;
-    // records the user guess to the console
-    console.log("userGuess: " + userGuess);
+    playerGuess = userGuess;
 
-    //Writes userGuess to HTML document
-    writeHTML("player-current-letter", userGuess);
+    // Check that a lower-case letter was pressed
+    var validLetter = computerChoices.includes(userGuess)
+    if (validLetter) {
+        console.log("The letter entered: *" + userGuess + "* is a valid letter");
 
-    //Update list of previous user guesses with the letter selected
-    arrHistoricGuesses.push(userGuess);
+        // records the user guess to the console
+        console.log("userGuess: " + userGuess);
 
-    // Writes the updated historical guesses array to the HTML document
-    writeHTML("player-guesses", arrHistoricGuesses);
+        //Writes userGuess to HTML document
+        writeHTML("player-current-letter", userGuess);
 
-    // Message to user that the computer is checking status
-    writeHTML("status-text",checkForMatch);
+        //Update list of previous user guesses with the letter selected
+        arrHistoricGuesses.push(userGuess);
 
-    // Decrement the attempt counter
-    if (debug) {
-        // Debug message
-        console.log("remainingAttempts (before decrementing): " + remainingAttempts);
-    }
+        // Writes the updated historical guesses array to the HTML document
+        writeHTML("player-guesses", arrHistoricGuesses);
 
-    // decrement the attempts remaining (remainingAttempts) by one every time the player chooses a letter 
-    remainingAttempts--;
+        // Message to user that the computer is checking status
+        writeHTML("status-text", checkForMatch);
 
-    // Writes the new remaining guesses value to the HTML document
-    writeHTML("remaining-guesses", remainingAttempts);
-    if (debug) {
-        //Debug message
-        console.log("remainingAttempts (after decrementing): " + remainingAttempts);
-    }
-
-    // Calls the determineMatch function.
-    // The return value sets the isMatch global variable to a boolean
-    isMatch = determineMatch(userGuess, computerGuess);
-
-    // If the global variable "isMatch" is true then iterate through the win scenario
-    if (isMatch) {
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////                 Win scenario                         //////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-
-        // Log a message to the console
-        console.log("Your pick of: *" + userGuess + "* matched the computer's guess of: *" + computerGuess + "*");
-
-        // Update the HTML document's status-text id to indicate a match
-        writeHTML("status-text", match);
-
-        // As we have a match we also want to set the "isWinner" global variable to true
-        isWinner = true;
-
-        //Increment the wins counter
-        winCounter++;
+        // Decrement the attempt counter
         if (debug) {
-            //Debug message
-            console.log("winCounter (after incrementing): " + winCounter);
+            // Debug message
+            console.log("remainingAttempts (before decrementing): " + remainingAttempts);
         }
 
-        //Alert that the user has won
-        alert("You Win!");
+        // decrement the attempts remaining (remainingAttempts) by one every time the player chooses a letter 
+        remainingAttempts--;
 
-        // Update HTML document
-        writeHTML("total-wins", winCounter);
+        // Writes the new remaining guesses value to the HTML document
+        writeHTML("remaining-guesses", remainingAttempts);
+        if (debug) {
+            //Debug message
+            console.log("remainingAttempts (after decrementing): " + remainingAttempts);
+        }
 
-        // call the resetGame function to reset key variables 
-        // to allow another game without resetting the win or loss counter
-        resetGame(userGuess,computerGuess,isWinner,arrHistoricGuesses);
+        // Calls the determineMatch function.
+        // The return value sets the isMatch global variable to a boolean
+        isMatch = determineMatch(userGuess, computerGuess);
+
+        // If the global variable "isMatch" is true then iterate through the win scenario
+        if (isMatch) {
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////                 Win scenario                         //////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+
+            // Log a message to the console
+            console.log("Your pick of: *" + userGuess + "* matched the computer's guess of: *" + computerGuess + "*");
+
+            // Update the HTML document's status-text id to indicate a match
+            writeHTML("status-text", match);
+
+            // As we have a match we also want to set the "isWinner" global variable to true
+            isWinner = true;
+
+            //Increment the wins counter
+            winCounter++;
+            if (debug) {
+                //Debug message
+                console.log("winCounter (after incrementing): " + winCounter);
+            }
+
+            //Alert that the user has won
+            alert("You Win!");
+
+            // Update HTML document
+            writeHTML("total-wins", winCounter);
+
+            // call the resetGame function to reset key variables 
+            // to allow another game without resetting the win or loss counter
+            resetGame(userGuess, computerGuess, isWinner, arrHistoricGuesses);
+        } else {
+            // This else statement handles the situation where we did not match 
+            // the computer's letter but still have attempts remaining
+
+            // Update HTML to show that the letter guessed does not match
+            writeHTML("status-text", noMatch);
+        }
+
+        // If we do not match the computer letter, and have exhausted all our available attempts
+        // we have triggered the lose scenario.
+        if (!isMatch && remainingAttempts <= 0) {
+
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////                 Lose scenario                        //////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+
+            // Set the isWinner boolean to false as we did not win
+            isWinner = false;
+
+            // Update HTML document to indicate that there was not a successful match
+            writeHTML("status-text", noMatch);
+
+            // Log message to the console
+            console.log("Exceeded the number of maximum number of attempts of: " + maxNumberOfAttempts);
+            console.log("¯\\_(ツ)_/¯ --- You did not guess the computer's guess of: *" + computerGuess + "*");
+
+            // Increment the loss counter
+            lossCounter++;
+            if (debug) {
+                //Debug message
+                console.log("lossCounter (after incrementing): " + lossCounter);
+            }
+
+            // Update the loss counter on the HTML document
+            writeHTML("total-losses", lossCounter);
+
+            // Alert the player that they have lost
+            alert("You lose!");
+
+            //  call the resetGame function to reset key variables 
+            // to allow another game without resetting the win or loss counter
+            resetGame(userGuess, computerGuess, isWinner, arrHistoricGuesses);
+        }
     } else {
-        // This else statement handles the situation where we did not match 
-        // the computer's letter but still have attempts remaining
-
-        // Update HTML to show that the letter guessed does not match
-        writeHTML("status-text", noMatch);
+        console.log("The letter entered: *" + playerGuess + "* is a *not* valid letter");
+        writeHTML("status-text", "<span class=\"label label-danger\">\"" + playerGuess + "\" is an invalid key...</span>");
     }
-
-    // If we do not match the computer letter, and have exhausted all our available attempts
-    // we have triggered the lose scenario.
-    if (!isMatch && remainingAttempts <= 0) {
-        
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////                 Lose scenario                        //////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////
-
-        // Set the isWinner boolean to false as we did not win
-        isWinner = false;
-
-        // Update HTML document to indicate that there was not a successful match
-        writeHTML("status-text", noMatch);
-
-        // Log message to the console
-        console.log("Exceeded the number of maximum number of attempts of: " + maxNumberOfAttempts);
-        console.log("¯\\_(ツ)_/¯ --- You did not guess the computer's guess of: *" + computerGuess + "*");
-
-        // Increment the loss counter
-        lossCounter++;
-        if (debug) {
-            //Debug message
-            console.log("lossCounter (after incrementing): " + lossCounter);
-        }
-
-        // Update the loss counter on the HTML document
-        writeHTML("total-losses", lossCounter);
-
-        // Alert the player that they have lost
-        alert("You lose!");
-
-        //  call the resetGame function to reset key variables 
-        // to allow another game without resetting the win or loss counter
-        resetGame(userGuess,computerGuess,isWinner,arrHistoricGuesses);
-    }
-
 }
-
 
 
 
